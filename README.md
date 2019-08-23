@@ -1,5 +1,8 @@
 # ProjetoSI
 
+Projeto criado com o intúito de ser utilizado para crumprir para com as exigências da cadeira Projeto de Sistemas de Informação 
+do Curso de Bacharelado em Sistemas de informação da UNIFIP.
+
 1. Create python 3 virtualenv
 > virtualenv -p python3 projetosi
 
