@@ -151,6 +151,10 @@ STATIC_URL = '/static/'
 # Examples: "http://foo.com/static/admin/", "/static/admin/".
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
+STATICFILES_DIRS = [
+    'static'
+]
+
 LOGIN_URL = '/'
 LOGOUT_URL = '/'
 
