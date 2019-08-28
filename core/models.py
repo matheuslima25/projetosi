@@ -19,3 +19,16 @@ class Produto(models.Model):
     os = models.CharField(_('Sistemas Operacionais'), max_length=7, choices=OS_CHOICES)
     video = models.URLField(_('Vídeo'), null=True, blank=True)
     image = models.FileField(_('Imagens'), upload_to='images/')
+    destaque = models.BooleanField(_('Destaque'), default=False)
+
+    def save(self, *args, **kwargs):
+        # Para apenas um Produto em destaque
+
+        if self.destaque:
+            try:
+                temp = Produto.objects.get(destaque=True)
+                if self != temp:
+                    temp.featured = False
+                    temp.save()
+            except Produto.DoesNotExist:
+                pass
