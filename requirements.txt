@@ -1,0 +1,6 @@
+Django==2.2.4
+pytz==2019.2
+sqlparse==0.3.0
+
+# django-crispy-forms
+git+git://github.com/maraujop/django-crispy-forms.git@dev#egg=django-crispy-forms
