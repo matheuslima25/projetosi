@@ -6,12 +6,24 @@ from core.choices import (
 )
 
 
+class Categoria(models.Model):
+    class Meta:
+        verbose_name = _('Categoria')
+        verbose_name_plural = _('Categorias')
+
+    nome = models.CharField(_('Nome'), max_length=125)
+
+    def __str__(self):
+        return self.nome
+
+
 class Produto(models.Model):
     class Meta:
         verbose_name = _('Produto')
         verbose_name_plural = _('Produtos')
 
     nome = models.CharField(_('Nome'), max_length=125)
+    categoria = models.ForeignKey(Categoria, on_delete=models.DO_NOTHING)
     codigo = models.CharField(_('Nome'), max_length=125)
     descricao = models.TextField(_('Nome'))
     preco = models.DecimalField(_('Nome'), decimal_places=2, max_digits=10)
