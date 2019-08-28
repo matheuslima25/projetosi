@@ -5,8 +5,6 @@ PLATAFORM_CHOICES = (
 )
 
 OS_CHOICES = (
-    ('xbox', 'Xbox One'),
-    ('ps4', 'Playstation 4'),
     ('windows', 'Windows'),
     ('linux', 'Linux'),
     ('macos', 'MacOS'),

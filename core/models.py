@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext as _
+from multiselectfield import MultiSelectField
 
 from core.choices import (
     PLATAFORM_CHOICES, OS_CHOICES,
@@ -24,11 +25,11 @@ class Produto(models.Model):
 
     nome = models.CharField(_('Nome'), max_length=125)
     categoria = models.ForeignKey(Categoria, on_delete=models.DO_NOTHING)
-    codigo = models.CharField(_('Nome'), max_length=125)
-    descricao = models.TextField(_('Nome'))
-    preco = models.DecimalField(_('Nome'), decimal_places=2, max_digits=10)
-    plataforma = models.CharField(_('Plataforma de Ativação'), max_length=10, choices=PLATAFORM_CHOICES)
-    os = models.CharField(_('Sistemas Operacionais'), max_length=7, choices=OS_CHOICES)
+    codigo = models.CharField(_('Código'), max_length=125)
+    descricao = models.TextField(_('Descrição'))
+    preco = models.DecimalField(_('Peço'), decimal_places=2, max_digits=10)
+    plataforma = MultiSelectField(_('Plataforma de Ativação'), choices=PLATAFORM_CHOICES)
+    os = MultiSelectField(_('Sistemas Operacionais'), choices=OS_CHOICES)
     video = models.URLField(_('Vídeo'), null=True, blank=True)
     image = models.FileField(_('Imagens'), upload_to='images/')
     destaque = models.BooleanField(_('Destaque'), default=False)
@@ -44,3 +45,8 @@ class Produto(models.Model):
                     temp.save()
             except Produto.DoesNotExist:
                 pass
+
+        super(Produto, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.nome
