@@ -38,21 +38,9 @@
                                     <li class="hassubs">
                                         <a href="#">Categorias</a>
                                         <ul>
-                                            <li><a href="categories.html">Category</a></li>
-                                            <li><a href="categories.html">Category</a></li>
-                                            <li><a href="categories.html">Category</a></li>
-                                            <li><a href="categories.html">Category</a></li>
-                                            <li><a href="categories.html">Category</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="hassubs">
-                                        <a href="#">Plataformas</a>
-                                        <ul>
-                                            <li><a href="categories.html">Category</a></li>
-                                            <li><a href="categories.html">Category</a></li>
-                                            <li><a href="categories.html">Category</a></li>
-                                            <li><a href="categories.html">Category</a></li>
-                                            <li><a href="categories.html">Category</a></li>
+                                            {% for categoria in categorias %}
+                                                <li><a href="#">{{ categoria.nome }}</a></li>
+                                            {% endfor %}
                                         </ul>
                                     </li>
                                     <li><a href="#">Promoções</a></li>
@@ -97,6 +85,10 @@
                                 </div>
                                 <div class="hamburger"><i class="fa fa-bars" aria-hidden="true"></i></div>
                             </div>
+                            <!-- Login -->
+                            <div class="header_extra ml-auto">
+                                <a href="{% url 'admin:login' %}" title="Login"><div class="fa fa-user-o"></div></a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -118,6 +110,7 @@
                 </div>
             </div>
         </div>
+
 
         <!-- Social -->
         <div class="header_social">
@@ -147,21 +140,6 @@
                     <li><a href="{% url 'index' %}">Home</a></li>
                     <li class="page_menu_item has-children menu_mm">
                         <a href="#">Categorias<i class="fa fa-angle-down"></i></a>
-                        <ul class="page_menu_selection menu_mn">
-                            <li class="page_menu_item menu_mn"><a href="categories.html">Category<i
-                                    class="fa fa-angle-down"></i></a></li>
-                            <li class="page_menu_item menu_mn"><a href="categories.html">Category<i
-                                    class="fa fa-angle-down"></i></a></li>
-                            <li class="page_menu_item menu_mn"><a href="categories.html">Category<i
-                                    class="fa fa-angle-down"></i></a></li>
-                            <li class="page_menu_item menu_mn"><a href="categories.html">Category<i
-                                    class="fa fa-angle-down"></i></a></li>
-                            <li class="page_menu_item menu_mn"><a href="categories.html">Category<i
-                                    class="fa fa-angle-down"></i></a></li>
-                        </ul>
-                    </li>
-                    <li class="page_menu_item has-children menu_mm">
-                        <a href="#">Plataformas<i class="fa fa-angle-down"></i></a>
                         <ul class="page_menu_selection menu_mn">
                             <li class="page_menu_item menu_mn"><a href="categories.html">Category<i
                                     class="fa fa-angle-down"></i></a></li>

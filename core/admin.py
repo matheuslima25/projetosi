@@ -10,6 +10,7 @@ admin.site.site_header = 'Games4Sale - Administração'
 @admin.register(Produto)
 class ProductAdmin(admin.ModelAdmin):
     form = ProductForm
+    list_display = ('nome', 'preco', 'destaque', 'promocao', 'propaganda')
 
 
 admin.site.register(Categoria)

@@ -10,6 +10,6 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
-        context['games'] = Produto.objects.all()
+        context['games'] = Produto.objects.all().order_by('-data')
         context['categoria_list'] = Categoria.objects.all()
         return context

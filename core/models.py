@@ -33,6 +33,9 @@ class Produto(models.Model):
     video = models.URLField(_('Vídeo'), null=True, blank=True)
     image = models.FileField(_('Imagens'), upload_to='images/')
     destaque = models.BooleanField(_('Destaque'), default=False)
+    promocao = models.BooleanField(_('Promoção'), default=False)
+    data = models.DateField(_('Data de Lançamento'), auto_now=True)
+    propaganda = models.BooleanField(_('Propaganda'), default=False)
 
     def save(self, *args, **kwargs):
         # Para apenas um Produto em destaque
@@ -41,7 +44,18 @@ class Produto(models.Model):
             try:
                 temp = Produto.objects.get(destaque=True)
                 if self != temp:
-                    temp.featured = False
+                    temp.destaque = False
+                    temp.save()
+            except Produto.DoesNotExist:
+                pass
+
+            # Para apenas um Produto na propaganda
+
+        if self.propaganda:
+            try:
+                temp = Produto.objects.get(propaganda=True)
+                if self != temp:
+                    temp.propaganda = False
                     temp.save()
             except Produto.DoesNotExist:
                 pass

@@ -447,6 +447,16 @@ section
 {
 	display: inline-block;
 }
+.fa-user-o{
+	display: inline-block;
+	height: 25px;
+	width: auto;
+	padding-top: 6px;
+}
+.fa-user-o:hover {
+	fill: #e95a5a;
+	color: #e95a5a;
+}
 .shopping_cart a svg
 {
 	display: inline-block;
@@ -1160,7 +1170,7 @@ section
 }
 .product_hot
 {
-	background: #1b1b1b;
+	background: #ff3c16;
 }
 
 /*********************************
@@ -1197,7 +1207,7 @@ section
 {
 	width: 391px;
 	height: 100%;
-	background: #e95a5a;
+	background: #ff3c16;
 	float: right;
 	padding-top: 28px;
 	padding-left: 42px;
