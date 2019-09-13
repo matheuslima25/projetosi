@@ -32,7 +32,8 @@
                                                  data-animation-out="animate-out fadeOut">
                                                 <div class="home_slider_title">{{ game.nome }}</div>
                                                 <div class="home_slider_subtitle">{{ game.descricao }}</div>
-                                                <div class="button button_light home_button"><a href="#">Compre
+                                                <div class="button button_light home_button"><a
+                                                        href="{% url 'product_detail' pk=game.pk %}">Compre
                                                     Agora</a></div>
                                             </div>
                                         </div>
@@ -65,7 +66,8 @@
                                     <div class="product_extra"><a href="#"></a></div>
                                 {% endif %}
                                 <div class="product_content">
-                                    <div class="product_title"><a href="#">{{ game.nome }}</a></div>
+                                    <div class="product_title"><a
+                                            href="{% url 'product_detail' pk=game.pk %}">{{ game.nome }}</a></div>
                                     <div class="product_price">R$ {{ game.preco }}</div>
                                 </div>
                             </div>
@@ -86,11 +88,14 @@
                     <div class="row">
                         <div class="col">
                             <div class="avds_xl_container clearfix">
-                                <div class="avds_xl_background" style="background-image:url({{ game.image.url }})"></div>
+                                <div class="avds_xl_background"
+                                     style="background-image:url({{ game.image.url }})"></div>
                                 <div class="avds_xl_content">
                                     <div class="avds_title">{{ game.nome }}</div>
-                                    <div class="avds_text" style="display:block;text-overflow: ellipsis;width: 200px;overflow: hidden; white-space: nowrap;">{{ game.descricao }}</div>
-                                    <div class="avds_link avds_xl_link"><a href="#">Veja mais</a></div>
+                                    <div class="avds_text"
+                                         style="display:block;text-overflow: ellipsis;width: 200px;overflow: hidden; white-space: nowrap;">{{ game.descricao }}</div>
+                                    <div class="avds_link avds_xl_link"><a href="{% url 'product_detail' pk=game.pk %}">Veja
+                                        mais</a></div>
                                 </div>
                             </div>
                         </div>

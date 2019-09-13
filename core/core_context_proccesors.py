@@ -1,4 +1,4 @@
-from .models import Categoria
+from .models import Categoria, Produto
 
 
 def categorias(request):
@@ -6,6 +6,6 @@ def categorias(request):
     return {'categorias': categoria}
 
 
-def plataformas(request):
-    plataformas = Categoria.objects.all()
-    return {'categorias': categoria}
+def produtos(request):
+    produtos = Produto.objects.all()
+    return {'produtos': produtos}

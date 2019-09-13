@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'multiselectfield',
 ]
 
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -66,6 +68,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'core.core_context_proccesors.categorias',
+                'core.core_context_proccesors.produtos',
             ],
         },
     },

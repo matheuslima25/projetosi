@@ -1,4 +1,5 @@
-from django.contrib.auth.forms import forms
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import forms, UserCreationForm
 
 from core.models import Produto
 
@@ -14,3 +15,15 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Produto
         fields = '__all__'
+
+
+class UserCreateForm(UserCreationForm):
+    class Meta:
+        model = get_user_model()
+        fields = ('username', 'email')
+
+    def __init__(self, *args, **kwargs):
+        super(UserCreateForm, self).__init__(*args, **kwargs)
+
+        for fieldname in ['username', 'password1', 'password2']:
+            self.fields[fieldname].help_text = None
