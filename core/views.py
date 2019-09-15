@@ -1,6 +1,10 @@
-from django.contrib.auth import views as auth_views, authenticate
+from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import get_object_or_404, render, redirect
+from django.core.paginator import PageNotAnInteger, EmptyPage, Paginator
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
 from django.views.generic import TemplateView, DetailView
 
 from core.forms import UserCreateForm
@@ -28,25 +32,40 @@ class ProductView(DetailView):
         return render(self, 'produtos/product.html', {'produto': product})
 
 
-def login(request, *args, **kwargs):
-    if request.method == 'POST':
-        if not request.POST.get('remember_me', None):
-            request.session.set_expiry(0)
-        else:
-            request.session.set_expiry(60 * 60 * 24 * 30)  # one month validity
-    return auth_views.LoginView(request, *args, **kwargs)
-
-
 def signup(request):
     if request.method == 'POST':
         form = UserCreateForm(request.POST)
         if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
-            login(request, user)
-            return redirect('/')
+            new_user = form.save()
+            messages.info(request, "Obrigado por se registrar. Agora você está logado.")
+            new_user = authenticate(username=form.cleaned_data['email'],
+                                    password=form.cleaned_data['password1'],
+                                    )
+            login(request, new_user)
+            return HttpResponseRedirect(reverse('index'))
     else:
         form = UserCreationForm()
     return render(request, 'admin/signup.html', {'form': form})
+
+
+def pesquisar(request):
+    termo_busca = request.GET.get('search', None)
+
+    if termo_busca:
+        search = Produto.objects.filter(nome__icontains=termo_busca)  # case insensitive
+    else:
+        search = Produto.objects.all().order_by('-data')
+
+    paginator = Paginator(search, 5)
+    page = request.GET.get('page')
+    try:
+        search = paginator.page(page)
+    except PageNotAnInteger:
+        search = paginator.page(1)
+    except EmptyPage:
+        search = paginator.page(paginator.num_pages)
+    context = {
+        'search': search
+    }
+
+    return render(request, 'produtos/pesquisa.html', context)

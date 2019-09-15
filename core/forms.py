@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import forms, UserCreationForm
+from django.db.models import Q
 
+from accounts.models import Account, Perfil
 from core.models import Produto
 
 
@@ -25,5 +27,17 @@ class UserCreateForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(UserCreateForm, self).__init__(*args, **kwargs)
 
-        for fieldname in ['username', 'password1', 'password2']:
-            self.fields[fieldname].help_text = None
+    def clean_email(self):
+        email = self.cleaned_data.get('email', '').lower()
+        if Account.objects.filter(Q(email=email)).exists():
+            raise forms.ValidationError(u'Já existe um usuário com este email.')
+        return email
+
+    def save(self, commit=True):
+        account = super(UserCreateForm, self).save(commit=False)
+        account.set_password(self.cleaned_data["password1"])
+        if commit:
+            account.save()
+
+        Perfil.objects.create(account=account)
+        return account

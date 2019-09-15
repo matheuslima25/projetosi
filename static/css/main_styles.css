@@ -457,6 +457,26 @@ section
 	fill: #e95a5a;
 	color: #e95a5a;
 }
+.fa-television{
+	display: inline-block;
+	height: 25px;
+	width: auto;
+	padding-top: 6px;
+}
+.fa-television:hover {
+	fill: #e95a5a;
+	color: #e95a5a;
+}
+.fa-sign-out{
+	display: inline-block;
+	height: 25px;
+	width: auto;
+	padding-top: 6px;
+}
+.fa-sign-out:hover {
+	fill: #e95a5a;
+	color: #e95a5a;
+}
 .shopping_cart a svg
 {
 	display: inline-block;

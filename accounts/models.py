@@ -104,7 +104,7 @@ class Perfil(models.Model):
     dt_nasc = models.DateField(_('Data de nascimento'), blank=True, null=True)
     telefone = models.CharField(_('Telefone'), max_length=20, blank=True, null=True)
     genero = models.CharField(_('Sexo'), max_length=16, choices=GENERO_CHOICES, blank=True, null=True)
-    endereco = models.ForeignKey(Endereco, on_delete=models.CASCADE)
+    endereco = models.ForeignKey(Endereco, on_delete=models.CASCADE, null=True, blank=True)
 
     ultimo_acesso = models.DateTimeField(auto_now=True)
     carrinho = models.ManyToManyField('core.Produto', blank=True, verbose_name=_(u'Carrinho de Compras'))
