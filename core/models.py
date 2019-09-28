@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext as _
 from multiselectfield import MultiSelectField
 
+from accounts.models import Account
 from core.choices import (
     PLATAFORM_CHOICES, OS_CHOICES,
 )
@@ -64,3 +65,17 @@ class Produto(models.Model):
 
     def __str__(self):
         return self.nome
+
+
+class Carrinho(models.Model):
+    class Meta:
+        verbose_name = _('Carrinho de Compras')
+        verbose_name_plural = _('Carrinho de Compras')
+
+    cliente = models.ForeignKey(Account, on_delete=models.CASCADE)
+    produtos = models.ManyToManyField(Produto, blank=True)
+    data = models.DateTimeField(_('Data'), auto_now_add=True)
+    aberto = models.BooleanField(_('Em aberto?'), default=True, null=True, blank=True)
+
+    def __str__(self):
+        return 'Carrinho de Compras - %s' % self.cliente

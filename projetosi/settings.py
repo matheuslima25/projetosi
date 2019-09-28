@@ -69,6 +69,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'core.core_context_proccesors.categorias',
                 'core.core_context_proccesors.produtos',
+                'core.core_context_proccesors.carrinho',
             ],
         },
     },

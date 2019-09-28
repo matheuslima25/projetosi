@@ -1480,6 +1480,7 @@ section
 	height: 25px;
 	width: auto;
 	padding-top: 6px;
+	color: black;
 }
 .fa-television:hover {
 	fill: #e95a5a;
@@ -1490,6 +1491,7 @@ section
 	height: 25px;
 	width: auto;
 	padding-top: 6px;
+	color: black;
 }
 .fa-sign-out:hover {
 	fill: #e95a5a;
