@@ -25,5 +25,9 @@ def carrinho(request):
     if not request.user.is_authenticated:
         carrinho = None
     else:
-        carrinho = Carrinho.objects.get(cliente=request.user).produtos.all().count()
+        try:
+            carrinho = Carrinho.objects.get(cliente=request.user).produtos.all().count()
+        except Carrinho.DoesNotExist:
+            carrinho = Carrinho.objects.create(cliente=request.user)
+            carrinho = carrinho.produtos.all().count()
     return {'carrinho': carrinho}
