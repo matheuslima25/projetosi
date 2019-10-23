@@ -72,6 +72,7 @@ TEMPLATES = [
                 'core.core_context_proccesors.categorias',
                 'core.core_context_proccesors.produtos',
                 'core.core_context_proccesors.carrinho',
+                'core.core_context_proccesors.profile_pk',
             ],
         },
     },

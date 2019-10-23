@@ -1,3 +1,4 @@
+from accounts.models import Perfil
 from .models import Categoria, Produto, Carrinho
 
 
@@ -11,9 +12,18 @@ def produtos(request):
     return {'produtos': produtos}
 
 
+def profile_pk(request):
+    if not request.user.is_authenticated:
+        perfil = None
+    else:
+        perfil = Perfil.objects.get(account=request.user)
+
+    return {'profile_pk': perfil}
+
+
 def carrinho(request):
     if not request.user.is_authenticated:
         carrinho = None
     else:
-        carrinho = Carrinho.objects.filter(cliente=request.user).count()
+        carrinho = Carrinho.objects.get(cliente=request.user).produtos.all().count()
     return {'carrinho': carrinho}

@@ -10,7 +10,8 @@ class ProductForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ProductForm, self).__init__(*args, **kwargs)
-        self.fields['destaque'].help_text = 'Ao marcar, a vídeo (caso possua) ou imagem fica como destaque na página inicial.'
+        self.fields[
+            'destaque'].help_text = 'Ao marcar, a vídeo (caso possua) ou imagem fica como destaque na página inicial.'
         self.fields['promocao'].help_text = 'Ao marcar, o produto ficará com uma etiqueta de promoção.'
         self.fields['propaganda'].help_text = 'Ao marcar, o produto ficará em um banner no fim da página.'
 
@@ -41,3 +42,13 @@ class UserCreateForm(UserCreationForm):
 
         Perfil.objects.create(account=account)
         return account
+
+
+class PerfilForm(forms.ModelForm):
+    class Meta:
+        model = Perfil
+        fields = (
+        'dt_nasc', 'telefone', 'genero','end_cep', 'end_estado', 'end_cidade', 'end_rua', 'end_numero', 'end_bairro',)
+
+    def __init__(self, *args, **kwargs):
+        super(PerfilForm, self).__init__(*args, **kwargs)

@@ -8,5 +8,8 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ('email', 'last_login')
 
 
-admin.site.register(Endereco)
-admin.site.register(Perfil)
+@admin.register(Perfil)
+class PerfilAdmin(admin.ModelAdmin):
+    list_display = ('account', 'ultimo_acesso',)
+    readonly_fields = ('ultimo_acesso',)
+

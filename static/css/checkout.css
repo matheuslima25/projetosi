@@ -1195,3 +1195,14 @@ section
 {
 	color: #FFFFFF;
 }
+.fa-user-circle-o{
+	display: inline-block;
+	height: 25px;
+	width: auto;
+	padding-top: 6px;
+	color: black;
+}
+.fa-user-circle-o:hover {
+	fill: #e95a5a;
+	color: #e95a5a;
+}

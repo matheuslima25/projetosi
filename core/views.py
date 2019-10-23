@@ -1,13 +1,15 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import PageNotAnInteger, EmptyPage, Paginator
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView, DetailView, UpdateView
 
-from core.forms import UserCreateForm
+from accounts.models import Perfil
+from core.forms import UserCreateForm, PerfilForm
 from core.models import Produto, Categoria, Carrinho
 
 
@@ -41,6 +43,8 @@ def signup(request):
             new_user = authenticate(username=form.cleaned_data['email'],
                                     password=form.cleaned_data['password1'],
                                     )
+            if form.is_valid():
+                Perfil.objects.create(account=new_user)
             login(request, new_user)
             return HttpResponseRedirect(reverse('index'))
     else:
@@ -85,3 +89,61 @@ class CarrinhoView(UpdateView):
             carrinho.produtos.add(produto)
             return HttpResponseRedirect(reverse('index'))
         return super(CarrinhoView, self).post(request, *args, **kwargs)
+
+
+class CartView(TemplateView, LoginRequiredMixin):
+    model = Produto
+    template_name = 'produtos/cart.html'
+    success_url = '/'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('entrar'))
+        return super().dispatch(request, *args, **kwargs)
+
+    def soma_precos(self):
+        user = self.request.user
+        carrinho = Carrinho.objects.get(cliente=user)
+        soma = 0
+        for p in carrinho.produtos.all():
+            soma += p.preco
+        return soma
+
+    def get_context_data(self, **kwargs):
+        context = super(CartView, self).get_context_data(**kwargs)
+        carrinho = Carrinho.objects.get(cliente=self.request.user)
+        context['carrinho_checkout'] = carrinho.produtos.all()
+        context['carrinho_soma'] = self.soma_precos
+        return context
+
+
+def remover_produto(request, pk):
+
+    if request.user.is_authenticated:
+        produto = get_object_or_404(Produto, pk=pk)
+        user = request.user
+        carrinho= Carrinho.objects.get(cliente=user)
+        carrinho.save()
+        carrinho.produtos.remove(produto)
+    return HttpResponseRedirect(reverse('cart'))
+
+
+def limpar_carrinho(request):
+    if request.user.is_authenticated:
+        user = request.user
+        try:
+            Carrinho.objects.get(cliente=user).delete()
+            Carrinho.objects.create(cliente=user)
+        except Carrinho.DoesNotExist:
+            Carrinho.objects.create(cliente=user)
+        return HttpResponseRedirect(reverse('cart'))
+
+
+class ProfileView(LoginRequiredMixin, UpdateView):
+    model = Perfil
+    form_class = PerfilForm
+    template_name = 'produtos/profile.html'
+
+    def get_success_url(self):
+        perfil = Perfil.objects.get(account=self.request.user)
+        return reverse_lazy('profile', kwargs={'pk': perfil.id})

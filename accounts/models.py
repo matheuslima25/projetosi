@@ -83,14 +83,7 @@ class Endereco(models.Model):
         verbose_name = _('Endereço')
         verbose_name_plural = _('Endereços')
 
-    pais = models.CharField(_('País'), max_length=20, blank=True, null=True)
-    end_cep = models.CharField(_('CEP'), max_length=16, blank=True, null=True)
-    end_estado = models.CharField(_('Estado'), max_length=120, blank=True, null=True, choices=ESTADOS_CHOICES)
-    end_cidade = models.CharField(_('Cidade'), max_length=120, blank=True, null=True)
-    end_rua = models.CharField(_('Rua'), max_length=255, blank=True, null=True)
-    end_numero = models.CharField(_('Número'), max_length=10, blank=True, null=True)
-    end_bairro = models.CharField(_('Bairro'), max_length=120, blank=True, null=True)
-    end_complemento = models.CharField(_('Complemento'), max_length=255, blank=True, null=True)
+
 
 
 class Perfil(models.Model):
@@ -104,10 +97,16 @@ class Perfil(models.Model):
     dt_nasc = models.DateField(_('Data de nascimento'), blank=True, null=True)
     telefone = models.CharField(_('Telefone'), max_length=20, blank=True, null=True)
     genero = models.CharField(_('Sexo'), max_length=16, choices=GENERO_CHOICES, blank=True, null=True)
-    endereco = models.ForeignKey(Endereco, on_delete=models.CASCADE, null=True, blank=True)
+    pais = models.CharField(_('País'), max_length=20, blank=True, null=True)
+    end_cep = models.CharField(_('CEP'), max_length=16, blank=True, null=True)
+    end_estado = models.CharField(_('Estado'), max_length=120, blank=True, null=True, choices=ESTADOS_CHOICES)
+    end_cidade = models.CharField(_('Cidade'), max_length=120, blank=True, null=True)
+    end_rua = models.CharField(_('Rua'), max_length=255, blank=True, null=True)
+    end_numero = models.CharField(_('Número'), max_length=10, blank=True, null=True)
+    end_bairro = models.CharField(_('Bairro'), max_length=120, blank=True, null=True)
+    end_complemento = models.CharField(_('Complemento'), max_length=255, blank=True, null=True)
 
     ultimo_acesso = models.DateTimeField(auto_now=True)
-    carrinho = models.ManyToManyField('core.Produto', blank=True, verbose_name=_(u'Carrinho de Compras'))
 
     def name(self):
         return self.account.name

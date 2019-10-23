@@ -1,0 +1,27 @@
+{% extends 'produtos/base.html' %} {% load crispy_forms_tags %} {% load static %}
+
+{% block main %}
+    <div class="home">
+        <div class="home_slider_container">
+            <form id="profile-form" action="{% url 'profile' pk=user.id %}" method="POST"
+                  enctype="multipart/form-data">{% csrf_token %}
+
+                {{ form|crispy }}
+                <div class="form-group">
+                    <button type="submit" name="update" class="btn btn-warning btn-block btn-submit" value="update" style="background-color: #ff3c16; color: #ffffff">
+                        Atualizar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% block backtop %} <div class="newsletter"> <div> </div> </div>{% endblock %}
+
+{% endblock %}
+
+{% block extend_js %}
+    <script src="{% static 'js/jquery.mask.min.js' %}"></script>
+    <script src="{% static 'js/masks.js' %}"></script>
+    <script src="{% static 'js/cep.js' %}"></script>
+{% endblock %}
