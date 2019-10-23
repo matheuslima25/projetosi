@@ -16,7 +16,10 @@ def profile_pk(request):
     if not request.user.is_authenticated:
         perfil = None
     else:
-        perfil = Perfil.objects.get(account=request.user)
+        try:
+            perfil = Perfil.objects.get(account=request.user)
+        except Perfil.DoesNotExist:
+            perfil = Perfil.objects.create(account=request.user)
 
     return {'profile_pk': perfil}
 
