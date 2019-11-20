@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from core.forms import ProductForm
-from .models import Produto, Categoria, Carrinho
+from .models import Produto, Categoria, Carrinho, Relatorio
 
 admin.site.site_title = 'Games4Sale'
 admin.site.site_header = 'Games4Sale - Administração'
@@ -21,6 +21,16 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('cliente', )
     list_filter = ('cliente', 'data', 'aberto')
     readonly_fields = ('data',)
+
+    def has_add_permission(self, request):
+        return False
+
+
+@admin.register(Relatorio)
+class RelatorioAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'valor', 'mes', 'ano')
+    search_fields = ('titulo', )
+    list_filter = ('mes',)
 
     def has_add_permission(self, request):
         return False

@@ -1,3 +1,7 @@
+import datetime
+from decimal import Decimal
+
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import ugettext as _
 from multiselectfield import MultiSelectField
@@ -5,7 +9,7 @@ from multiselectfield import MultiSelectField
 from accounts.models import Account
 from core.choices import (
     PLATAFORM_CHOICES, OS_CHOICES,
-)
+    MONTH_CHOICES, YEARS_CHOICES)
 
 
 class Categoria(models.Model):
@@ -76,6 +80,33 @@ class Carrinho(models.Model):
     produtos = models.ManyToManyField(Produto, blank=True)
     data = models.DateTimeField(_('Data'), auto_now_add=True)
     aberto = models.BooleanField(_('Em aberto?'), default=True, null=True, blank=True)
+    valor = models.DecimalField(_('Valor'), decimal_places=2, max_digits=12, validators=[MinValueValidator(Decimal('0.00'))], default=0.00)
 
     def __str__(self):
         return 'Carrinho de Compras - %s' % self.cliente
+
+
+def today():
+    return datetime.date.today()
+
+
+class Relatorio(models.Model):
+    class Meta:
+        verbose_name = _('Relatório de vendas')
+        verbose_name_plural = _('Relatórios de vendas')
+
+    titulo = models.CharField(_(u'Título'), max_length=125)
+    valor = models.DecimalField(_(u'Valor'), decimal_places=2, max_digits=12, validators=[MinValueValidator(Decimal('0.00'))], default=0.00)
+    mes = models.CharField(_(u'Mês'), max_length=9, choices=MONTH_CHOICES, default=str(today().month))
+    ano = models.PositiveIntegerField(_(u'Ano'), choices=YEARS_CHOICES, default=today().year)
+
+    created_at = models.DateTimeField(_(u'Data de Criação'), auto_now_add=True)
+    updated_at = models.DateTimeField(_(u'Data de Atualização'), auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.titulo = 'Relatório - %s/%s' % (str(self.mes), str(self.ano))
+        super(Relatorio, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return u'%s' % self.titulo

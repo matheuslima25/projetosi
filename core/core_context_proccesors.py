@@ -29,7 +29,7 @@ def carrinho(request):
         carrinho = None
     else:
         try:
-            carrinho = Carrinho.objects.get(cliente=request.user).produtos.all().count()
+            carrinho = Carrinho.objects.get(cliente=request.user, aberto=True).produtos.all().count()
         except Carrinho.DoesNotExist:
             carrinho = Carrinho.objects.create(cliente=request.user)
             carrinho = carrinho.produtos.all().count()

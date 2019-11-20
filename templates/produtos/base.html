@@ -41,7 +41,7 @@
                                         <a href="#">Categorias</a>
                                         <ul>
                                             {% for categoria in categorias %}
-                                                <li><a href="#">{{ categoria.nome }}</a></li>
+                                                <li><a href="{% url 'category' pk=categoria.pk%}">{{ categoria.nome }}</a></li>
                                             {% endfor %}
                                         </ul>
                                     </li>

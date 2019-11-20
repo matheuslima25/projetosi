@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm
@@ -10,7 +12,7 @@ from django.views.generic import TemplateView, DetailView, UpdateView
 
 from accounts.models import Perfil
 from core.forms import UserCreateForm, PerfilForm
-from core.models import Produto, Categoria, Carrinho
+from core.models import Produto, Categoria, Carrinho, Relatorio
 
 
 class HomeView(TemplateView):
@@ -32,6 +34,27 @@ class ProductView(DetailView):
     def post_detail(self, pk):
         product = get_object_or_404(Produto, pk=pk)
         return render(self, 'produtos/product.html', {'produto': product})
+
+
+def category(request, pk):
+
+    categoria = Categoria.objects.get(pk=pk)
+    produtos = Produto.objects.filter(categoria=categoria)
+
+    paginator = Paginator(produtos, 5)
+    page = request.GET.get('page')
+    try:
+        search = paginator.page(page)
+    except PageNotAnInteger:
+        search = paginator.page(1)
+    except EmptyPage:
+        search = paginator.page(paginator.num_pages)
+    context = {
+        'produto': produtos,
+        'category': categoria
+    }
+
+    return render(request, 'produtos/categoria.html', context)
 
 
 def signup(request):
@@ -84,9 +107,13 @@ class CarrinhoView(UpdateView):
         if self.request.user.is_authenticated:
             produto = get_object_or_404(Produto, pk=self.kwargs['pk'])
             user = self.request.user
-            carrinho, created = Carrinho.objects.get_or_create(cliente=user)
-            carrinho.save()
+            try:
+                carrinho = Carrinho.objects.get(cliente=user, aberto=True)
+            except Carrinho.DoesNotExist:
+                carrinho = Carrinho.objects.create(cliente=user, aberto=True)
             carrinho.produtos.add(produto)
+            carrinho.valor += produto.preco
+            carrinho.save()
             return HttpResponseRedirect(reverse('index'))
         return super(CarrinhoView, self).post(request, *args, **kwargs)
 
@@ -103,7 +130,7 @@ class CartView(TemplateView, LoginRequiredMixin):
 
     def soma_precos(self):
         user = self.request.user
-        carrinho = Carrinho.objects.get(cliente=user)
+        carrinho = Carrinho.objects.get(cliente=user, aberto=True)
         soma = 0
         for p in carrinho.produtos.all():
             soma += p.preco
@@ -111,29 +138,43 @@ class CartView(TemplateView, LoginRequiredMixin):
 
     def get_context_data(self, **kwargs):
         context = super(CartView, self).get_context_data(**kwargs)
-        carrinho = Carrinho.objects.get(cliente=self.request.user)
+        carrinho = Carrinho.objects.get(cliente=self.request.user, aberto=True)
         context['carrinho_checkout'] = carrinho.produtos.all()
         context['carrinho_soma'] = self.soma_precos
         return context
 
 
 def remover_produto(request, pk):
-
     if request.user.is_authenticated:
         produto = get_object_or_404(Produto, pk=pk)
         user = request.user
-        carrinho= Carrinho.objects.get(cliente=user)
+        carrinho = Carrinho.objects.get(cliente=user, aberto=True)
         carrinho.save()
         carrinho.produtos.remove(produto)
     return HttpResponseRedirect(reverse('cart'))
+
+
+def today():
+    return datetime.date.today()
 
 
 def limpar_carrinho(request):
     if request.user.is_authenticated:
         user = request.user
         try:
-            Carrinho.objects.get(cliente=user).delete()
-            Carrinho.objects.create(cliente=user)
+            cart = Carrinho.objects.get(cliente=user, aberto=True)
+            try:
+                r = Relatorio.objects.get(mes=today().month, ano=today().year)
+                r.valor += cart.valor
+                r.save()
+                cart.aberto = False
+                cart.save()
+                Carrinho.objects.create(cliente=user)
+            except Relatorio.DoesNotExist:
+                Relatorio.objects.create(titulo='Relatório %s/%s' % (cart.data.month, cart.data.year), mes=cart.data.month, ano=cart.data.year, valor=cart.valor)
+                cart.aberto = False
+                cart.save()
+                Carrinho.objects.create(cliente=user)
         except Carrinho.DoesNotExist:
             Carrinho.objects.create(cliente=user)
         return HttpResponseRedirect(reverse('cart'))
