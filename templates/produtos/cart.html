@@ -28,7 +28,7 @@
                         {% for obj in carrinho_checkout.all %}
                             <div class="cart_item_product d-flex flex-row align-items-center justify-content-start">
                                 <div class="cart_item_image">
-                                    <div><img src="{{ obj.image.url }}" alt=""></div>
+                                    <div><img src="{{ obj.image.url }}" alt="" style="height: 200px; width: 150px;"></div>
                                 </div>
                                 <div class="cart_item_name_container">
                                     <div class="cart_item_name"><a href="#">{{ obj.nome }}</a></div>
