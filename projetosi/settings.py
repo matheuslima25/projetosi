@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 from decouple import config
 from dj_database_url import parse as dburl
+import cloudinary  # cloudinary
+import cloudinary.uploader  # cloudinary
+import cloudinary.api  # cloudinary
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -41,6 +44,7 @@ INSTALLED_APPS = [
     'accounts',
     'crispy_forms',
     'multiselectfield',
+    'cloudinary',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -165,3 +169,9 @@ LOGOUT_URL = '/'
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+cloudinary.config(
+    cloud_name=config('CLOUDNAME'),
+    api_key=config('CLOUDKEY'),
+    api_secret=config('CLOUDSECRET'),
+)

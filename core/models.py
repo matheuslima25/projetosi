@@ -1,6 +1,7 @@
 import datetime
 from decimal import Decimal
 
+from cloudinary.models import CloudinaryField
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import ugettext as _
@@ -36,7 +37,7 @@ class Produto(models.Model):
     plataforma = MultiSelectField(_('Plataforma de Ativação'), choices=PLATAFORM_CHOICES)
     os = MultiSelectField(_('Sistemas Operacionais'), choices=OS_CHOICES)
     video = models.URLField(_('Vídeo'), null=True, blank=True)
-    image = models.FileField(_('Imagens'), upload_to='images/')
+    image = CloudinaryField(_('Imagens'))
     destaque = models.BooleanField(_('Destaque'), default=False)
     promocao = models.BooleanField(_('Promoção'), default=False)
     data = models.DateField(_('Data de Lançamento'), auto_now=True)

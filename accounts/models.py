@@ -84,8 +84,6 @@ class Endereco(models.Model):
         verbose_name_plural = _('Endereços')
 
 
-
-
 class Perfil(models.Model):
     class Meta:
         verbose_name = _('Perfil')
